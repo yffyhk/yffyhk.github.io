@@ -1,1 +1,63 @@
-"Hello World" 
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+        <meta charset="utf-8">
+
+		<title>Chat Room</title>	
+	</head>
+    <body onload="connect()">
+        <div class="gridBox">
+
+            <div class="left_top">
+                <textarea id="chat"></textarea>
+            </div>
+
+            <div class="left_bottom">
+                <input type="text" id="textInput">
+                <button id="sendButton" onclick="send()">Send</button>
+            </div>
+            
+            <div class="right">
+                <ul id="playerList">
+                    <li>aaa</li>      
+                </ul>
+            </div>
+        </div>
+        
+        
+        <script type="text/javascript">
+
+            var ws ;
+
+            function send() {
+                let textInput = document.getElementById("textInput");
+                var text = textInput.value;
+                textInput.value = '';
+
+                ws.send(JSON.stringify({
+                    'action':'onMessage',
+                    'data':text
+                }));           
+            }
+
+            function log(msg) {
+                let chatList = document.getElementById("chat");
+                chatList.value += msg + "\r\n";
+                chatList.scrollTop = chatList.scrollHeight;
+            }
+
+            function connect() {
+                ws = new WebSocket("wss://kdk6pz791d.execute-api.us-east-1.amazonaws.com/production");
+                ws.onopen = () => { log('Connect Server Success')   };
+
+                ws.onmessage = function(event) {
+                    var msg = event.data;
+                    log(msg);
+                };
+
+                ws.onclose = () => { log('Connect Server Failed')   };
+            }
+
+        </script>
+    </body>
+</html>
