@@ -5,7 +5,7 @@
 
 		<title>Chat Room</title>	
 	</head>
-    <body onload="connect()">
+    <body onload="connect()" onkeydown="keydown(event)">
         <div class="gridBox">
 
             <div class="left_top">
@@ -18,12 +18,10 @@
             </div>
             
             <div class="right">
-                <ul id="playerList">
-                    <li>aaa</li>      
+                <ul id="playerList">    
                 </ul>
             </div>
         </div>
-        
         
         <script type="text/javascript">
 
@@ -32,12 +30,16 @@
             function send() {
                 let textInput = document.getElementById("textInput");
                 var text = textInput.value;
-                textInput.value = '';
 
-                ws.send(JSON.stringify({
-                    'action':'onMessage',
-                    'data':text
-                }));           
+                if(text.length > 0)
+                {
+                    textInput.value = '';
+
+                    ws.send(JSON.stringify({
+                        'action':'onMessage',
+                        'data':text
+                    }));       
+                }
             }
 
             function log(msg) {
@@ -56,6 +58,17 @@
                 };
 
                 ws.onclose = () => { log('Connect Server Failed')   };
+            }
+
+            function keydown(event){
+                if(event.keyCode == 13) {
+                    send();
+                }
+                else
+                {
+                    let textInput = document.getElementById("textInput");
+                    textInput.focus();
+                }
             }
 
         </script>
