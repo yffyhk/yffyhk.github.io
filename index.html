@@ -34,7 +34,7 @@
                 if(text.length > 0)
                 {
                     textInput.value = '';
-
+                    
                     ws.send(JSON.stringify({
                         'action':'onMessage',
                         'data':text
@@ -49,15 +49,38 @@
             }
 
             function connect() {
-                ws = new WebSocket("wss://kdk6pz791d.execute-api.us-east-1.amazonaws.com/production");
-                ws.onopen = () => { log('Connect Server Success')   };
+                ws = new WebSocket("wss://kdk6pz791d.execute-api.us-east-1.amazonaws.com/prod");
+                ws.onopen = function() { 
+                    log('Connect Server Success');    
+                    ws.send(JSON.stringify({
+                        'action':'onEnter'
+                    }));   
+                };
 
-                ws.onmessage = function(event) {
-                    var msg = event.data;
-                    log(msg);
+                ws.onmessage = function(event) {         
+                    execute(event);
                 };
 
                 ws.onclose = () => { log('Connect Server Failed')   };
+            }
+
+            function execute(event){
+         
+                var data = JSON.parse(event.data);
+
+                var msg = data.message;
+                var type = data.type;
+
+                if(type == "Message"){
+                    log(msg);
+                }
+                else if(type == "Enter"){
+                    RefreshList(msg);
+                }
+                else if(type == "Leave"){
+                    
+                }
+                
             }
 
             function keydown(event){
@@ -69,6 +92,14 @@
                     let textInput = document.getElementById("textInput");
                     textInput.focus();
                 }
+            }
+
+            function RefreshList(players){
+                var inner = ''
+                for(var i=0;i<players.length; i++){
+                    inner += `<li>${players[i]}</li>`;
+                }
+                document.getElementById("playerList").innerHTML = inner;
             }
 
         </script>
