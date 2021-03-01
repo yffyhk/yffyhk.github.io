@@ -2,11 +2,20 @@
     <head>
         <link rel="stylesheet" href="index.css">
         <meta charset="utf-8">
+        
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="356220281529-2k14nl0ocd22oc48qif8k0pj5uppu1hm.apps.googleusercontent.com.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+
 
 		<title>Chat Room</title>	
 	</head>
     <body onload="connect()" onkeydown="keydown(event)">
         <div class="gridBox">
+            <div class="right_head">
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            </div>
+
 
             <div class="left_top">
                 <textarea id="chat"></textarea>
@@ -100,6 +109,17 @@
                     inner += `<li>${players[i]}</li>`;
                 }
                 document.getElementById("playerList").innerHTML = inner;
+            }
+
+
+            //Google
+
+            function onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
             }
 
         </script>
