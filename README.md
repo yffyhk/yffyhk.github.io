@@ -1,8 +1,9 @@
 simple chatroom by aws lambda + websocket gateway
 
-///////////////////////////////////////////onDisconnect
-//When one client disconnect , notice other connecting client
+//onDisconnect
 
+//When one client disconnect , notice other connecting client
+```
 const AWS = require('aws-sdk');
 var ddb = new AWS.DynamoDB.DocumentClient();
 
@@ -50,10 +51,11 @@ async function deleteID(ID) {
         Key:{ ConnectionId: ID}
     }).promise();
 }
+```
+//onEnter
 
-///////////////////////////////////////////onEnter
 //When one client connect , notice other connecting client
-
+```
 const AWS = require('aws-sdk');
 var ddb = new AWS.DynamoDB.DocumentClient();
 
@@ -87,10 +89,11 @@ async function getConnection(){
   var params = {  TableName : 'ChatRoomTable',  };
   return await ddb.scan(params).promise();
 }
+```
+//onConnect
 
-///////////////////////////////////////////onConnect
 //When one client connect , add info. to database
-
+```
 var AWS = require('aws-sdk');
 var ddb = new AWS.DynamoDB.DocumentClient();
 
@@ -110,11 +113,14 @@ async function addID(ID) {
                     
     return await ddb.put(params).promise();
 }
+```
+//onMessage
 
-///////////////////////////////////////////onMessage
 //When one client speak , notice other connecting client 
+
 //*There is no message save in database
 
+```
 const AWS = require('aws-sdk');
 var ddb = new AWS.DynamoDB.DocumentClient();
 
@@ -152,6 +158,6 @@ async function getConnection(){
   var params = {  TableName : 'ChatRoomTable',  };
   return await ddb.scan(params).promise();
 }
-
+```
 
 
